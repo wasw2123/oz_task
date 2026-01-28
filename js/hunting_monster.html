@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box"></div>
+
+    <script>
+        // monster 100 hp 잡기
+        const CreDoc = (element, msg, id) => {
+            createEl = document.createElement(element)
+            content = createEl.textContent = msg
+            document.getElementById(id).appendChild(createEl)
+        }
+        
+        const dmg = parseInt(prompt("공격력 = 양의 정수"));
+        if(dmg < 0){
+            alert("양의 정수를 입력해주세요")
+        } else {
+            CreDoc("h1", "게임을 시작합니다", "box")
+            let hp = 100
+            let at_count = 0
+            while(hp > 0){
+                at_count +=1
+                hp -= dmg
+                CreDoc("p", `공격 횟수 ${at_count}`, "box")
+                if(hp < 0){
+                    hp = 0
+                }
+                CreDoc("p", `남은 체력 ${hp}`, "box")
+            }
+            CreDoc("h3", "사냥에 성공하였습니다.", "box")
+        }
+        
+        
+    </script>
+</body>
+</html>

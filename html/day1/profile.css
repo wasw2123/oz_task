@@ -1,0 +1,44 @@
+*{
+    text-align: center;
+    font-size: 16px;
+}
+
+html {
+    background-color: #b3a194;
+}
+
+body {
+    width : 640px;
+    margin: auto;
+}
+
+img {
+    margin-top: 20px;;
+    border-radius: 5%;
+}
+
+p, strong {
+    font-size: 1.2rem;
+}
+
+p {
+    font-family: sans-serif;
+
+
+}
+
+ul {
+    display: inline-block;
+}
+
+li, li strong {
+    display:flex;
+    font-size: 1.4rem;
+}
+
+p strong{
+    color: brown;
+    font-family: "Nanum Pen Script", cursive;;
+}
+
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <h1 id="name"></h1>
+    <p id="hobby"></p>
+    <p id="song"></p> -->
+
+    <h1 id="name"></h1>
+    <p id="like_ani"></p>
+    <p id="like_fruit"></p>
+    
+    <script>
+        // const nameEl = document.querySelector("#name")
+        // const name = prompt("your name?")
+        // nameEl.textContent = name
+
+        // const hobbyEl = document.querySelector("#hobby")
+        // const hobby = prompt("your hobby?")
+        // hobbyEl.textContent = `취미는 ${hobby}입니다`
+
+        // document.querySelector("#song").textContent = `좋아하는 노래는 ${prompt("좋아하는 노래를 입력해주세요")}입니다.`
+
+        // 과제
+        // 이름, 좋아하는 동물, 좋아하는 과일 프롬프트로 받아 페이지에 표시
+        
+        
+        const WriteDoc = (ID, answer) => {
+            return document.querySelector(ID).textContent = answer
+        }
+        
+        const name = prompt("name is ??")
+        const animal = prompt("animal is ??")
+        const fruit = prompt("fruit is ??")
+        
+        WriteDoc('#name', `제 이름은 ${name}입니다.`)
+        WriteDoc('#like_ani', `제가 좋아하는 동물은 ${animal}입니다`)
+        WriteDoc('#like_fruit', `제가 좋아하는 과일은 ${fruit}입니다` )
+        
+    </script>
+</body>
+</html>
