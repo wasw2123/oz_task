@@ -1,0 +1,66 @@
+#container{
+    background-color: rgb(226, 224, 227);
+    max-width: 600px;
+    padding: 20px;
+    margin: auto;
+    margin-top: 40px;
+    border-radius: 16px;
+}
+
+#container.dark-mode {
+    background-color: #343a40;
+}
+
+
+label{
+    font-weight: 600;
+}
+
+.gender_radio div{
+    display: inline-block;
+
+}
+
+.title {
+    display: inline-block;
+}
+.theme-toggle{
+    float: right;
+    border-radius: 8px;
+    background-color: #121212;
+    color: #ececec;
+    padding: 4px 12px;
+}
+
+
+/* 기본 라이트 모드 설정 */
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --btn-bg: #343a40;
+  --btn-text: #ffffff;
+}
+
+/* 다크 모드 클래스가 추가되었을 때의 설정 */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #ececec;
+  --btn-bg: #f8f9fa;
+  --btn-text: #212529;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  font-weight: bold;
+}
