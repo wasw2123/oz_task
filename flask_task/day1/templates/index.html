@@ -9,7 +9,13 @@
     <ul>
         {% for user in users %}
         <li>
-            It is username <strong>{{ user["username"] }}</strong> & It is name <strong>{{ user["name"] }}</strong>
+            {{ loop.index }}번 username: {{ user["username"] }}
+        </li>
+        {% endfor %}
+        <br>
+        {% for user in users %}
+        <li>
+            {{ loop.index }}번 name: {{ user["name"] }}
         </li>
         {% endfor %}
     </ul>
