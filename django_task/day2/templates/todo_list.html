@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for todo in todos %}
+        <h2><a href="{{ todo.id }}" target="_blank">{{ todo.title }}</a></h2>
+    <p>{{ todo.description }}</p>
+    <p>완료 여부{{ todo.is_completed }}</p>
+        <hr>
+    {% endfor %}
+
+</body>
+</html>
