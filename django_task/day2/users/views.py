@@ -1,0 +1,27 @@
+from django.conf import settings
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
+
+# Create your views here.
+def sign_up(request):
+    form = UserCreationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('login'))
+    context = {
+        'form': form
+    }
+    return render(request, 'registration/sign_up.html', context)
+
+def user_login(request):
+    form = AuthenticationForm(request, request.POST or None)
+    if form.is_valid():
+        login(request, form.get_user())
+        return redirect(reverse('todo_list'))
+    context = {
+        'form': form
+    }
+    return render(request, 'registration/login.html', context)
