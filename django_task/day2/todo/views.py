@@ -11,8 +11,8 @@ def todo_list(request):
     }
     return render(request,'todo_list.html', context)
 
-def todo_info(request, todo_id):
-    todo = get_object_or_404(Todos, pk=todo_id)
+def todo_info(request, pk):
+    todo = get_object_or_404(Todos, pk=pk)
     context = {
         'todo': todo,
     }

@@ -5,12 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-    {% for todo in todos %}
-        <h2><a href="{{ todo.id }}" target="_blank">{{ todo.title }}</a></h2>
-    <p>{{ todo.description }}</p>
-    <p>완료 여부{{ todo.is_completed }}</p>
-        <hr>
-    {% endfor %}
-
+    <ul>
+        {% for todo in todos %}
+        <li style="list-style: none">
+            <h2><a href="{% url 'todo_info' todo.pk %}" target="_blank">{{ todo.title }}</a></h2>
+            <p>{{ todo.description }}</p>
+            <p>완료 여부{{ todo.is_completed }}</p>
+            <hr>
+        </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
