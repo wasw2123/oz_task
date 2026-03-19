@@ -8,8 +8,9 @@ from django.views.decorators.http import require_http_methods
 from todo.forms import TodoForm
 from todo.models import Todos
 
+@login_required()
 def todo_list(request):
-    todos = Todos.objects.all().order_by('-created_at')
+    todos = Todos.objects.filter(user=request.user).order_by('-created_at')
 
     paginator = Paginator(todos, 5)
     page = request.GET.get('page')
@@ -20,8 +21,9 @@ def todo_list(request):
     }
     return render(request,'todo_list.html', context)
 
+@login_required()
 def todo_info(request, pk):
-    todo = get_object_or_404(Todos, pk=pk)
+    todo = get_object_or_404(Todos, pk=pk, user=request.user)
     context = {
         'todo': todo,
     }
