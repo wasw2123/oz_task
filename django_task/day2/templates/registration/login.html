@@ -10,6 +10,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button>로그인</button>
+        <a href="{% url 'sign_up' %}">회원가입</a>
     </form>
 </body>
 </html>
