@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<nav>
+{% if request.user.is_authenticated %}
+    {{ request.user.username }}
+    <form action="{% url 'logout' %}" method="post" style="display: inline">
+        {% csrf_token %}
+        <button>로그아웃</button>
+    </form>
+    {% else %}
+        <a href="{% url 'login' %}">로그인</a>
+        <a href="{% url 'sign_up' %}">회원가입</a>
+    {% endif %}
+</nav>
+    {% block content %}{% endblock %}
+</body>
+</html>
