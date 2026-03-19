@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_http_methods
 
 from todo.forms import TodoForm
 from todo.models import Todos
@@ -46,3 +47,10 @@ def todo_update(request, pk):
         "form": form
     }
     return render(request, 'todo_update.html', context)
+
+@login_required()
+@require_http_methods(['POST'])
+def todo_delete(request, pk):
+    todo = get_object_or_404(Todos, pk=pk, user=request.user)
+    todo.delete()
+    return redirect('todo_list')

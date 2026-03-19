@@ -5,9 +5,13 @@
 
 {% block content %}
     <h2>제목: {{ todo.title }}</h2>
-    <p>작성자: {{ todo.user }}
+    <p style="display: inline">작성자: {{ todo.user }}
         {% if request.user == todo.user %}
         <a href="{% url 'todo_update' todo.pk %}">수정</a>
+        <form action="{% url 'todo_delete' todo.pk %}" method="post" style="display: inline">
+        {% csrf_token %}
+        <button>삭제</button>
+        </form>
         {% endif %}
     </p>
     <hr>
