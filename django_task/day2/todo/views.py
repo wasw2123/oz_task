@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
@@ -9,10 +10,13 @@ from todo.models import Todos
 
 def todo_list(request):
     todos = Todos.objects.all().order_by('-created_at')
-    if not todos:
-        raise Http404
+
+    paginator = Paginator(todos, 5)
+    page = request.GET.get('page')
+    todos_page = paginator.get_page(page)
+
     context = {
-        'todos': todos,
+        'todos_page': todos_page,
     }
     return render(request,'todo_list.html', context)
 
