@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div>
-        {% if user.is_authenticated %}
-        {{ request.user.username }}
-        <form action="{% url 'logout' %}" method="post" style="display: inline">
-            {% csrf_token %}
-            <button>로그아웃</button>
-        </form>
-        {% else %}
-        <a href="{% url 'login' %}">로그인</a>
-        <a href="{% url 'sign_up' %}">회원가입</a>
-        {% endif %}
-    </div>
-    <ul>
-        {% for todo in todos %}
-        <li style="list-style: none">
-            <h2><a href="{% url 'todo_info' todo.pk %}" target="_blank">{{ todo.title }}</a></h2>
-            <p>{{ todo.description }}</p>
-            <p>완료 여부{{ todo.is_completed }}</p>
-            <hr>
-        </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    todo list
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+    <h1>Todo List</h1>
+    <a href="{% url 'todo_create' %}">todo 만들기</a>
+<ul>
+    {% for todo in todos %}
+    <li style="list-style: none">
+        <h2><a href="{% url 'todo_info' todo.pk %}">{{ todo.title }}</a></h2>
+        <p>{{ todo.description }}</p>
+        <p>완료 여부: {{ todo.is_completed }}</p>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>로그인 후 이용해주세요.</p>
+{% endif %}
+{% endblock %}

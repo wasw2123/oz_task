@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}
+    todo info
+{% endblock %}
+
+{% block content %}
     <h2>제목: {{ todo.title }}</h2>
+    <p>작성자: {{ todo.user }}</p>
     <hr>
     <p>설명: {{ todo.description }}</p>
     <p>시작일: {{ todo.start_date }}</p>
     <p>종료일: {{ todo.end_date }}</p>
     <p>완료여부: {{ todo.is_completed }}</p>
-</body>
-</html>
+    <a href="{% url 'todo_list' %}">목록</a>
+{% endblock %}
