@@ -5,7 +5,11 @@
 
 {% block content %}
     <h2>제목: {{ todo.title }}</h2>
-    <p>작성자: {{ todo.user }}</p>
+    <p>작성자: {{ todo.user }}
+        {% if request.user == todo.user %}
+        <a href="{% url 'todo_update' todo.pk %}">수정</a>
+        {% endif %}
+    </p>
     <hr>
     <p>설명: {{ todo.description }}</p>
     <p>시작일: {{ todo.start_date }}</p>

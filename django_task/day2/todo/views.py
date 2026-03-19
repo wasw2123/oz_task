@@ -34,3 +34,15 @@ def todo_create(request):
         "form": form
     }
     return render(request, 'todo_create.html', context)
+
+@login_required()
+def todo_update(request, pk):
+    todo = get_object_or_404(Todos, pk=pk, user=request.user)
+    form = TodoForm(request.POST or None, instance=todo)
+    if form.is_valid():
+        form.save()
+        return redirect('todo_info', pk=todo.pk)
+    context = {
+        "form": form
+    }
+    return render(request, 'todo_update.html', context)

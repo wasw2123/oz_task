@@ -25,6 +25,7 @@ urlpatterns = [
     path('todo/', todo.views.todo_list, name='todo_list'),
     path('todo/<int:pk>/', todo.views.todo_info, name='todo_info'),
     path('todo/create/', todo.views.todo_create, name='todo_create'),
+    path('todo/<int:pk>/update/', todo.views.todo_update, name='todo_update'),
 
     # auth
     path('accounts/', include('django.contrib.auth.urls')),
