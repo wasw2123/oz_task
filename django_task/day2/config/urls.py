@@ -27,6 +27,9 @@ urlpatterns = [
     path('todo/create/', todo.views.todo_create, name='todo_create'),
     path('todo/<int:pk>/update/', todo.views.todo_update, name='todo_update'),
     path('todo/<int:pk>/delete/', todo.views.todo_delete, name='todo_delete'),
+    path('cbv/', include('todo.urls')),
+
+
 
     # auth
     path('signup/', users.views.sign_up, name='sign_up' ),

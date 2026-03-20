@@ -3,7 +3,7 @@ from django.db import models
 
 User = get_user_model()
 # Create your models here.
-class Todos(models.Model):
+class Todo(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     start_date = models.DateTimeField()

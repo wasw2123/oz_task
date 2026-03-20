@@ -7,11 +7,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 
 from todo.forms import TodoForm, TodoUpdateForm
-from todo.models import Todos
+from todo.models import Todo
 
 @login_required()
 def todo_list(request):
-    todos = Todos.objects.filter(user=request.user).order_by('-created_at')
+    todos = Todo.objects.filter(user=request.user).order_by('-created_at')
 
     q = request.GET.get('q')
     if q:
@@ -22,13 +22,13 @@ def todo_list(request):
     todos_page = paginator.get_page(page)
 
     context = {
-        'todos_page': todos_page,
+        'todo_list': todos_page,
     }
     return render(request, 'todo/todo_list.html', context)
 
 @login_required()
 def todo_info(request, pk):
-    todo = get_object_or_404(Todos, pk=pk, user=request.user)
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
     context = todo.__dict__
     return render(request, 'todo/todo_info.html', context)
 
@@ -47,7 +47,7 @@ def todo_create(request):
 
 @login_required()
 def todo_update(request, pk):
-    todo = get_object_or_404(Todos, pk=pk, user=request.user)
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
     form = TodoUpdateForm(request.POST or None, instance=todo)
     if form.is_valid():
         form.save()
@@ -60,6 +60,6 @@ def todo_update(request, pk):
 @login_required()
 @require_http_methods(['POST'])
 def todo_delete(request, pk):
-    todo = get_object_or_404(Todos, pk=pk, user=request.user)
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
     todo.delete()
     return redirect('todo_list')

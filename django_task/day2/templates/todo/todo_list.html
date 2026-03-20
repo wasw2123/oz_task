@@ -8,7 +8,7 @@
     <h1>Todo List</h1>
     <a href="{% url 'todo_create' %}">todo 만들기</a>
 <ul>
-    {% for todo in todos_page %}
+    {% for todo in todo_list %}
     <li style="list-style: none">
         <h2><a href="{% url 'todo_info' todo.pk %}">{{ todo.title }}</a></h2>
         <p>{{ todo.description|truncatechars:20 }}</p>
@@ -30,24 +30,24 @@
 
 {#  pagination  #}
 {# 첫 페이지, 이전 #}
-    {% if todos_page.has_previous %}
+    {% if todo_list.has_previous %}
         <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">처음으로</a>
-        <a href="?page={{ todos_page.number|add:-1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
+        <a href="?page={{ todo_list.number|add:-1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
     {% endif %}
 
 {# 숫자 버튼#}
-    {% for i in todos_page.paginator.page_range %}
-        {% if i == todos_page.number %}
+    {% for i in todo_list.paginator.page_range %}
+        {% if i == todo_list.number %}
             <strong>{{ i }}</strong>
-        {% elif i > todos_page.number|add:-3 and i < todos_page.number|add:3 %}
+        {% elif i > todo_list.number|add:-3 and i < todo_list.number|add:3 %}
             <a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
         {% endif %}
     {% endfor %}
 
 {# 다음, 마지막 #}
-{% if todos_page.has_next %}
-    <a href="?page={{ todos_page.number|add:1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
-    <a href="?page={{ todos_page.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막</a>
+{% if todo_list.has_next %}
+    <a href="?page={{ todo_list.number|add:1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
+    <a href="?page={{ todo_list.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막</a>
 {% endif %}
 </div>
 {% endblock %}
