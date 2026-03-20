@@ -21,12 +21,18 @@
     <p>로그인 후 이용해주세요.</p>
 {% endif %}
 
-{#  pagination  #}
 <div>
+{# search #}
+    <form method="get">
+        <input type="text" name="q" placeholder="검색" value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+        <button>검색</button>
+    </form>
+
+{#  pagination  #}
 {# 첫 페이지, 이전 #}
     {% if todos_page.has_previous %}
-        <a href="?page=1">처음으로</a>
-        <a href="?page={{ todos_page.number|add:-1 }}">이전</a>
+        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">처음으로</a>
+        <a href="?page={{ todos_page.number|add:-1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
     {% endif %}
 
 {# 숫자 버튼#}
@@ -34,14 +40,14 @@
         {% if i == todos_page.number %}
             <strong>{{ i }}</strong>
         {% elif i > todos_page.number|add:-3 and i < todos_page.number|add:3 %}
-            <a href="?page={{ i }}">{{ i }}</a>
+            <a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
         {% endif %}
     {% endfor %}
 
 {# 다음, 마지막 #}
 {% if todos_page.has_next %}
-    <a href="?page={{ todos_page.number|add:1 }}">다음</a>
-    <a href="?page={{ todos_page.paginator.num_pages }}">마지막</a>
+    <a href="?page={{ todos_page.number|add:1 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
+    <a href="?page={{ todos_page.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막</a>
 {% endif %}
 </div>
 {% endblock %}

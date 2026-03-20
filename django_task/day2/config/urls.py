@@ -29,7 +29,7 @@ urlpatterns = [
     path('todo/<int:pk>/delete/', todo.views.todo_delete, name='todo_delete'),
 
     # auth
-    path('accounts/', include('django.contrib.auth.urls')),
     path('signup/', users.views.sign_up, name='sign_up' ),
-    path('login/', users.views.user_login, name='login')
+    path('login/', users.views.user_login, name='login'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

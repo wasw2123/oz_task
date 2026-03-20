@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todo',
-    'users'
+    'users',
 ] + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
@@ -123,4 +123,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 LOGIN_REDIRECT_URL = '/todo/'
-LOGOUT_REDIRECT_URL = '/todo/'
+LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_URL = '/login/'
