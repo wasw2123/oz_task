@@ -2,7 +2,7 @@ from django import forms
 from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from todo.models import Todo
 
@@ -65,6 +65,22 @@ class TodoCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
+
+class TodoUpdateView(UpdateView):
+    model = Todo
+    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
+
+    def get_object(self, queryset = None):
+        obj = super().object(queryset)
+        if self.request.user.is_staff or obj.user == self.request.user:
+            return obj
+        raise Http404
+
+    def get_success_url(self):
+        return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
+
+
+
 
 
 
