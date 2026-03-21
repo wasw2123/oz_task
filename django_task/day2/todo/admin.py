@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from todo.models import Todos
+from todo.models import Todo
 
 
 # Register your models here.
 
-@admin.register(Todos)
+@admin.register(Todo)
 class TodosAdmin(admin.ModelAdmin):
     ...

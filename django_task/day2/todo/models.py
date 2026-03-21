@@ -3,7 +3,7 @@ from django.db import models
 
 User = get_user_model()
 # Create your models here.
-class Todos(models.Model):
+class Todo(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     start_date = models.DateTimeField()
@@ -19,3 +19,7 @@ class Todos(models.Model):
 
     def __str__(self):
         return self.title
+
+    # def get_absolute_url(self):
+    #     from django.urls import reverse
+    #     return reverse('cbv_todo_detail', kwargs={"pk": self.pk})
