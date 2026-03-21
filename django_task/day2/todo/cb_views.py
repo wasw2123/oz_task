@@ -2,10 +2,9 @@ from django import forms
 from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from todo.models import Todo
-
 
 class TodoListView(ListView):
     model = Todo
@@ -69,15 +68,35 @@ class TodoCreateView(CreateView):
 class TodoUpdateView(UpdateView):
     model = Todo
     fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
+    template_name = 'todo/todo_update.html'
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        #날짜 선택 위젯
+        form.fields['start_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
+        form.fields['end_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
+        return form
 
     def get_object(self, queryset = None):
-        obj = super().object(queryset)
+        obj = super().get_object(queryset)
         if self.request.user.is_staff or obj.user == self.request.user:
             return obj
         raise Http404
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
+
+class TodoDeleteView(DeleteView):
+    model = Todo
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if self.request.user.is_staff or obj.user == self.request.user:
+            return obj
+        raise Http404
+
+    def get_success_url(self):
+        return reverse('cbv_todo_list')
 
 
 
