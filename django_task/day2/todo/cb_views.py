@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.urls import reverse
 from django.db.models import Q
 from django.http import Http404
@@ -46,9 +47,13 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.object.__dict__)
-        #CommentForm, #Comment_page_obj
         context['comment_form'] = CommentForm()
-        context['comment_page_obj'] = Comment.objects.filter(todo=self.object).order_by('-created_at')
+        comment_list = Comment.objects.filter(todo=self.object).order_by('-created_at')
+        paginator = Paginator(comment_list, 10)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+
         return context
 
 
@@ -124,6 +129,18 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     fields = ['message',]
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if self.request.user.is_superuser or obj.user == self.request.user:
+            return obj
+        raise Http404
+
+    def get_success_url(self):
+        return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)

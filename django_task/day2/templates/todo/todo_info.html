@@ -36,18 +36,22 @@
         <button>등록</button>
     </form>
     <ul>
-        {% for comment in comment_page_obj %}
+        {% for comment in page_obj %}
         <li>
             <!-- 원래 보여지는 댓글 텍스트 영역 -->
             <div id="comment-text-{{ comment.pk }}">
-                {{ comment.message }}
-                {% if comment.user == request.user %}
-                <button onclick="toggleCommentForm({{ comment.pk }})">수정</button>
-                {% endif %}
+                {{ comment.message }} |
                 {% if comment.created_at|date:"YmdHi" < comment.updated_at|date:"YmdHi" %}
                 <span>수정일: {{ comment.updated_at|date:"Y-m-d H:i" }}</span>
                 {% else%}
                 <span>작성일: {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                {% endif %}
+                {% if comment.user == request.user %}
+                <button onclick="toggleCommentForm({{ comment.pk }})">수정</button>
+                <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display: inline">
+                {% csrf_token %}
+                <button>삭제</button>
+                </form>
                 {% endif %}
             </div>
 
@@ -64,7 +68,10 @@
         </li>
         {% endfor %}
     </ul>
+    {% include 'pagination.html' %}
+{% endblock %}
 
+{% block js %}
     <script>
         function toggleCommentForm(commentId) {
             const textDiv = document.getElementById('comment-text-' + commentId);

@@ -122,6 +122,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_DIR = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [
+    STATIC_DIR
+]
+
+
+
 LOGIN_REDIRECT_URL = '/cbv/todo/'
 LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_URL = '/login/'
