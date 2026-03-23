@@ -120,3 +120,16 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    fields = ['message',]
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if self.request.user.is_superuser or obj.user == self.request.user:
+            return obj
+        raise Http404
+
+    def get_success_url(self):
+        return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})

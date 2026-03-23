@@ -23,7 +23,7 @@
     <p>종료일: {{ end_date }}</p>
     <p>완료여부: {{ is_completed }}</p>
     <p>
-    {% if create_at|date < modified_at|date %}
+    {% if create_at|date:"YmdHi" < modified_at|date:"YmdHi" %}
         수정일: {{ modified_at }}
     {% else %}
         작성일: {{ created_at }}
@@ -38,13 +38,44 @@
     <ul>
         {% for comment in comment_page_obj %}
         <li>
-            {{ comment.message }}
-            {% if comment.created_at|date < comment.updated_at|date %}
-            <span>수정일: {{ comment.updated_at|date:"Y-m-d H:i" }}</span>
-            {% else%}
-            <span>작성일: {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+            <!-- 원래 보여지는 댓글 텍스트 영역 -->
+            <div id="comment-text-{{ comment.pk }}">
+                {{ comment.message }}
+                {% if comment.user == request.user %}
+                <button onclick="toggleCommentForm({{ comment.pk }})">수정</button>
+                {% endif %}
+                {% if comment.created_at|date:"YmdHi" < comment.updated_at|date:"YmdHi" %}
+                <span>수정일: {{ comment.updated_at|date:"Y-m-d H:i" }}</span>
+                {% else%}
+                <span>작성일: {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                {% endif %}
+            </div>
+
+            {% if comment.user == request.user %}
+            <div id="comment-form-{{ comment.pk }}" style="display: none;">
+                <form method="post" action="{% url 'comment_update' comment.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <textarea name="message" rows="2" cols="30" required>{{ comment.message }}</textarea>
+                    <button type="submit">저장</button>
+                    <button type="button" onclick="toggleCommentForm({{ comment.pk }})">취소</button>
+                </form>
+            </div>
             {% endif %}
         </li>
         {% endfor %}
     </ul>
+
+    <script>
+        function toggleCommentForm(commentId) {
+            const textDiv = document.getElementById('comment-text-' + commentId);
+            const formDiv = document.getElementById('comment-form-' + commentId);
+            if (formDiv.style.display === 'none') {
+                formDiv.style.display = 'block';
+                textDiv.style.display = 'none';
+            } else {
+                formDiv.style.display = 'none';
+                textDiv.style.display = 'block';
+            }
+        }
+    </script>
 {% endblock %}
