@@ -35,7 +35,7 @@
         {{ comment_form.as_p }}
         <button>등록</button>
     </form>
-    <ul>
+    <ul id="comment_list">
         {% for comment in page_obj %}
         <li>
             <!-- 원래 보여지는 댓글 텍스트 영역 -->
@@ -68,7 +68,7 @@
         </li>
         {% endfor %}
     </ul>
-    {% include 'pagination.html' %}
+    {% include 'pagination.html' with fragment='comment_list'%}
 {% endblock %}
 
 {% block js %}
