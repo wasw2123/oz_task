@@ -5,13 +5,16 @@
 
 {% block content %}
     <h2>제목: {{ title }}</h2>
-    <p style="display: inline">작성자: {{ user }}
+    <p style="display: inline">
+        작성자: {{ user }}
+        <a href="{% url 'cbv_todo_list' %}">목록</a>
         {% if request.user == user %}
-        <a href="{% url 'cbv_todo_update' id %}">수정</a>
-        <form action="{% url 'cbv_todo_delete' id %}" method="post" style="display: inline">
-        {% csrf_token %}
-        <button>삭제</button>
-        </form>
+            <a href="{% url 'cbv_todo_update' id %}">수정</a>
+            <a href="{% url 'cbv_todo_delete' id %}">삭제</a>
+            {#        <form action="{% url 'cbv_todo_delete' id %}" method="post" style="display: inline"> #}
+            {#        {% csrf_token %} #}
+            {#        <button type="button">삭제</button> #}
+            {#        </form> #}
         {% endif %}
     </p>
     <hr>
@@ -20,11 +23,66 @@
     <p>종료일: {{ end_date }}</p>
     <p>완료여부: {{ is_completed }}</p>
     <p>
-    {% if create_at|date < modified_at|date %}
+    {% if create_at|date:"YmdHi" < modified_at|date:"YmdHi" %}
         수정일: {{ modified_at }}
     {% else %}
         작성일: {{ created_at }}
     {% endif %}
     </p>
-    <a href="{% url 'cbv_todo_list' %}">목록</a>
+    <hr>
+    <form method="post" action="{% url 'comment_create' todo.id %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button>등록</button>
+    </form>
+    <ul id="comment_list">
+        {% for comment in page_obj %}
+        <li>
+            <!-- 원래 보여지는 댓글 텍스트 영역 -->
+            <div id="comment-text-{{ comment.pk }}">
+                {{ comment.message }} |
+                {% if comment.created_at|date:"YmdHi" < comment.updated_at|date:"YmdHi" %}
+                <span>수정일: {{ comment.updated_at|date:"Y-m-d H:i" }}</span>
+                {% else%}
+                <span>작성일: {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                {% endif %}
+                {% if comment.user == request.user %}
+                <button onclick="toggleCommentForm({{ comment.pk }})">수정</button>
+                <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display: inline">
+                {% csrf_token %}
+                <button>삭제</button>
+                </form>
+                {% endif %}
+            </div>
+
+            {% if comment.user == request.user %}
+            <div id="comment-form-{{ comment.pk }}" style="display: none;">
+                <form method="post" action="{% url 'comment_update' comment.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <textarea name="message" rows="2" cols="30" required>{{ comment.message }}</textarea>
+                    <button type="submit">저장</button>
+                    <button type="button" onclick="toggleCommentForm({{ comment.pk }})">취소</button>
+                </form>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% include 'pagination.html' with fragment='comment_list'%}
+{% endblock %}
+
+{% block js %}
+    <script>
+        function toggleCommentForm(commentId) {
+            const textDiv = document.getElementById('comment-text-' + commentId);
+            const formDiv = document.getElementById('comment-form-' + commentId);
+            if (formDiv.style.display === 'none') {
+                formDiv.style.display = 'block';
+                textDiv.style.display = 'none';
+            } else {
+                formDiv.style.display = 'none';
+                textDiv.style.display = 'block';
+            }
+        }
+    </script>
 {% endblock %}
