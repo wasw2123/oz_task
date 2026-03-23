@@ -23,3 +23,11 @@ class Todo(models.Model):
     # def get_absolute_url(self):
     #     from django.urls import reverse
     #     return reverse('cbv_todo_detail', kwargs={"pk": self.pk})
+
+
+class Comment(models.Model):
+    todo = models.ForeignKey(Todo, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    message = models.TextField('메시지', max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -7,13 +7,14 @@
     <h2>제목: {{ title }}</h2>
     <p style="display: inline">
         작성자: {{ user }}
+        <a href="{% url 'cbv_todo_list' %}">목록</a>
         {% if request.user == user %}
-        <a href="{% url 'cbv_todo_update' id %}">수정</a>
-        <a href="{% url 'cbv_todo_delete' id %}">삭제</a>
-{#        <form action="{% url 'cbv_todo_delete' id %}" method="post" style="display: inline"> #}
-{#        {% csrf_token %} #}
-{#        <button type="button">삭제</button> #}
-{#        </form> #}
+            <a href="{% url 'cbv_todo_update' id %}">수정</a>
+            <a href="{% url 'cbv_todo_delete' id %}">삭제</a>
+            {#        <form action="{% url 'cbv_todo_delete' id %}" method="post" style="display: inline"> #}
+            {#        {% csrf_token %} #}
+            {#        <button type="button">삭제</button> #}
+            {#        </form> #}
         {% endif %}
     </p>
     <hr>
@@ -28,5 +29,22 @@
         작성일: {{ created_at }}
     {% endif %}
     </p>
-    <a href="{% url 'cbv_todo_list' %}">목록</a>
+    <hr>
+    <form method="post" action="{% url 'comment_create' todo.id %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button>등록</button>
+    </form>
+    <ul>
+        {% for comment in comment_page_obj %}
+        <li>
+            {{ comment.message }}
+            {% if comment.created_at|date < comment.updated_at|date %}
+            <span>수정일: {{ comment.updated_at|date:"Y-m-d H:i" }}</span>
+            {% else%}
+            <span>작성일: {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

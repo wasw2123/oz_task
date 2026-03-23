@@ -5,7 +5,9 @@ from django.db.models import Q
 from django.http import Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from todo.models import Todo
+from todo.forms import CommentForm
+from todo.models import Todo, Comment
+
 
 class TodoListView(LoginRequiredMixin, ListView):
     model = Todo
@@ -44,6 +46,9 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.object.__dict__)
+        #CommentForm, #Comment_page_obj
+        context['comment_form'] = CommentForm()
+        context['comment_page_obj'] = Comment.objects.filter(todo=self.object).order_by('-created_at')
         return context
 
 
@@ -100,3 +105,18 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('cbv_todo_list')
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['message', ]
+    pk_url_kwarg = 'todo_id'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.todo = Todo.objects.get(pk=self.kwargs['todo_id'])
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})
