@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.db.models import Q, Prefetch
-from django.http import Http404, request
+from django.http import Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from todo.forms import CommentForm, TodoForm, TodoUpdateForm
