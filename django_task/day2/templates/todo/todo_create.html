@@ -5,9 +5,10 @@
 
 {% block content %}
     <h1>Todo Create</h1>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button>생성</button>
+        <button onclick="history.back()">돌아가기</button>
     </form>
 {% endblock %}

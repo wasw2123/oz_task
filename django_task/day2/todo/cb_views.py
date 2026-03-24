@@ -6,7 +6,7 @@ from django.db.models import Q, Prefetch
 from django.http import Http404, request
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from todo.forms import CommentForm
+from todo.forms import CommentForm, TodoForm, TodoUpdateForm
 from todo.models import Todo, Comment
 
 
@@ -62,7 +62,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
+    form_class = TodoForm
     template_name = 'todo/todo_create.html'
 
     def get_form(self, form_class = None):
@@ -81,7 +81,7 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
+    form_class = TodoUpdateForm
     template_name = 'todo/todo_update.html'
 
     def get_form(self, form_class = None):
