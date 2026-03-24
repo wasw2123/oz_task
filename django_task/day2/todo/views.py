@@ -43,7 +43,7 @@ def todo_create(request):
     context = {
         "form": form
     }
-    return render(request, 'todo/todo_create.html', context)
+    return render(request, 'todo/todo_form.html', context)
 
 @login_required()
 def todo_update(request, pk):
@@ -55,7 +55,7 @@ def todo_update(request, pk):
     context = {
         "form": form
     }
-    return render(request, 'todo/todo_update.html', context)
+    return render(request, 'todo/todo_form.html', context)
 
 @login_required()
 @require_http_methods(['POST'])

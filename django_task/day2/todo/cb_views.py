@@ -63,7 +63,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
     form_class = TodoForm
-    template_name = 'todo/todo_create.html'
+    template_name = 'todo/todo_form.html'
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
@@ -79,10 +79,16 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'create'
+        context['btn_name'] = '생성'
+        return context
+
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
     form_class = TodoUpdateForm
-    template_name = 'todo/todo_update.html'
+    template_name = 'todo/todo_form.html'
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
@@ -99,6 +105,13 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'update'
+        context['btn_name'] = '수정'
+        return context
+
 
 class TodoDeleteView(LoginRequiredMixin, DeleteView):
     model = Todo
