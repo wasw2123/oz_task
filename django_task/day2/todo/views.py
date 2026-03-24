@@ -1,8 +1,6 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 
@@ -43,7 +41,7 @@ def todo_create(request):
     context = {
         "form": form
     }
-    return render(request, 'todo/todo_create.html', context)
+    return render(request, 'todo/todo_form.html', context)
 
 @login_required()
 def todo_update(request, pk):
@@ -55,7 +53,7 @@ def todo_update(request, pk):
     context = {
         "form": form
     }
-    return render(request, 'todo/todo_update.html', context)
+    return render(request, 'todo/todo_form.html', context)
 
 @login_required()
 @require_http_methods(['POST'])

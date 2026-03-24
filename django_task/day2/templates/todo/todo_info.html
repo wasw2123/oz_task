@@ -4,13 +4,13 @@
 {% endblock %}
 
 {% block content %}
-    <h2>제목: {{ title }}</h2>
+    <h2>제목: {{ todo.title }}</h2>
     <p style="display: inline">
-        작성자: {{ user }}
+        작성자: {{ todo.user }}
         <a href="{% url 'cbv_todo_list' %}">목록</a>
-        {% if request.user == user %}
-            <a href="{% url 'cbv_todo_update' id %}">수정</a>
-            <a href="{% url 'cbv_todo_delete' id %}">삭제</a>
+        {% if request.user == todo.user or request.user.is_superuser %}
+            <a href="{% url 'cbv_todo_update' todo.pk %}">수정</a>
+            <a href="{% url 'cbv_todo_delete' todo.pk %}">삭제</a>
             {#        <form action="{% url 'cbv_todo_delete' id %}" method="post" style="display: inline"> #}
             {#        {% csrf_token %} #}
             {#        <button type="button">삭제</button> #}
@@ -18,19 +18,19 @@
         {% endif %}
     </p>
     <hr>
-    <p>설명: {{ description }}</p>
-    <p>시작일: {{ start_date }}</p>
-    <p>종료일: {{ end_date }}</p>
-    <p>완료여부: {{ is_completed }}</p>
+    <p>설명: {{ todo.description }}</p>
+    <p>시작일: {{ todo.start_date }}</p>
+    <p>종료일: {{ todo.end_date }}</p>
+    <p>완료여부: {{ todo.is_completed }}</p>
     <p>
-    {% if create_at|date:"YmdHi" < modified_at|date:"YmdHi" %}
-        수정일: {{ modified_at }}
+    {% if todo.create_at|date:"YmdHi" < todo.updated_at|date:"YmdHi" %}
+        수정일: {{ todo.updated_at }}
     {% else %}
-        작성일: {{ created_at }}
+        작성일: {{ todo.created_at }}
     {% endif %}
     </p>
     <hr>
-    <form method="post" action="{% url 'comment_create' todo.id %}">
+    <form method="post" action="{% url 'comment_create' todo.pk %}">
         {% csrf_token %}
         {{ comment_form.as_p }}
         <button>등록</button>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+    todo create
+{% endblock %}
+
+{% block content %}
+    <h1>Todo {{ title }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>{{ btn_name }}</button>
+        <button onclick="history.back()">돌아가기</button>
+    </form>
+{% endblock %}

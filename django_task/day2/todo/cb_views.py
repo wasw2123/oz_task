@@ -2,11 +2,11 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.http import Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from todo.forms import CommentForm
+from todo.forms import CommentForm, TodoForm, TodoUpdateForm
 from todo.models import Todo, Comment
 
 
@@ -33,7 +33,10 @@ class TodoListView(LoginRequiredMixin, ListView):
         return queryset
 
 class TodoDetailView(LoginRequiredMixin, DetailView):
-    model = Todo
+    # model = Todo
+    queryset = Todo.objects.prefetch_related(
+        Prefetch('comments', queryset=Comment.objects.select_related('user').order_by('-created_at'))
+    )
     template_name = 'todo/todo_info.html'
 
     def get_object(self, queryset=None):
@@ -46,9 +49,9 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(self.object.__dict__)
+        context['todo']=self.object
         context['comment_form'] = CommentForm()
-        comment_list = Comment.objects.filter(todo=self.object).order_by('-created_at')
+        comment_list = self.object.comments.all()
         paginator = Paginator(comment_list, 10)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -59,8 +62,8 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
-    template_name = 'todo/todo_create.html'
+    form_class = TodoForm
+    template_name = 'todo/todo_form.html'
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
@@ -76,10 +79,16 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'create'
+        context['btn_name'] = '생성'
+        return context
+
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
-    fields = ['title', 'description', 'start_date', 'end_date', 'is_completed']
-    template_name = 'todo/todo_update.html'
+    form_class = TodoUpdateForm
+    template_name = 'todo/todo_form.html'
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
@@ -96,6 +105,13 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'update'
+        context['btn_name'] = '수정'
+        return context
+
 
 class TodoDeleteView(LoginRequiredMixin, DeleteView):
     model = Todo
@@ -149,4 +165,4 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         raise Http404
 
     def get_success_url(self):
-        return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})
+        return reverse('cbv_todo_list')

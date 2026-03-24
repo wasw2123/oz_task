@@ -5,15 +5,26 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-    <h1>Todo List</h1>
+    <h1 class="inline">Todo List</h1>
     <a href="{% url 'cbv_todo_create' %}">todo 만들기</a>
-<ul>
+    <hr>
+<ul class="list-unstyled">
     {% for todo in todo_list %}
-    <li style="list-style: none">
-        <h2><a href="{% url 'cbv_todo_info' todo.pk %}">{{ todo.title }}</a></h2>
-        <p>{{ todo.description|truncatechars:20 }}</p>
-        <p>완료 여부: {{ todo.is_completed }}</p>
-        <hr>
+    <li class="d-flex align-items-center mb-3 border-bottom pb-3">
+        {% if todo.thumbnail %}
+            <img src="{{ todo.thumbnail.url }}" alt="" class="rounded col-2">
+        {% elif todo.completed_image %}
+            <img src="{{ todo.completed_image.url }}" alt="" class="rounded col-2">
+        {% endif %}
+        <div class="flex-grow-1">
+        <h2 class="h5 mb-1">
+            <a href="{% url 'cbv_todo_info' todo.pk %}" class="text-decoration-none">{{ todo.title }}</a>
+            {% if todo.is_completed %}
+                <small class="text-success">| Completed</small>
+            {% endif %}
+        </h2>
+        <p class="mb-1 text-muted">{{ todo.description|truncatechars:20 }}</p>
+        </div>
     </li>
     {% endfor %}
 </ul>
