@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	signup_done
+{% endblock %}
+
+{% block content %}
+    <h1>이메일 인증이 남았습니다.</h1>
+    <p>
+        이메일({{ user.email }})에서 인증 링크를 확인해주세요.
+    </p>
+{% endblock %}

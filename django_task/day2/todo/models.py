@@ -1,14 +1,14 @@
 from io import BytesIO
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL
+from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.db import models
 from PIL import Image
 
 from utils.time_stamp_model import TimeStampModel
 
-User = AUTH_USER_MODEL
+User = get_user_model()
 
 # Create your models here.
 class Todo(TimeStampModel):

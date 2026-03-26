@@ -143,8 +143,11 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 
 
 LOGIN_REDIRECT_URL = '/cbv/todo/'
-LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/users/login/'
+LOGIN_URL = '/users/login/'
+
+AUTH_USER_MODEL = 'users.User'
+
 
 SUMMERNOTE_CONFIG = {
     # Or, you can set it to `False` to use SummernoteInplaceWidget by default - no iframe mode
