@@ -1,14 +1,14 @@
 from io import BytesIO
 from pathlib import Path
 
-from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.db import models
 from PIL import Image
 
+from config.settings import AUTH_USER_MODEL
 from utils.time_stamp_model import TimeStampModel
 
-User = get_user_model()
+User = AUTH_USER_MODEL
 
 # Create your models here.
 class Todo(TimeStampModel):
@@ -19,7 +19,7 @@ class Todo(TimeStampModel):
     is_completed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='todos')
     completed_image = models.ImageField(null=True, blank=True, upload_to='todo/%Y-%m-%d/')
-    thumbnail = models.ImageField(null=True, blank=True, upload_to='todo/%Y-%m-%d/thumbnail')
+    thumbnail = models.ImageField(null=True, blank=True, upload_to='todo/%Y-%m-%d/thumbnail', default='default/33e345714c201d_9W8hQqW.png')
 
     class Meta:
         verbose_name = '할 일'

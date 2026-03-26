@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.db.models import Q, Prefetch
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from todo.forms import CommentForm, TodoForm, TodoUpdateForm
@@ -65,13 +65,6 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
     form_class = TodoForm
     template_name = 'todo/todo_form.html'
 
-    def get_form(self, form_class = None):
-        form = super().get_form(form_class)
-        #날짜 선택 위젯
-        form.fields['start_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
-        form.fields['end_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
-        return form
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -89,13 +82,6 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
     form_class = TodoUpdateForm
     template_name = 'todo/todo_form.html'
-
-    def get_form(self, form_class = None):
-        form = super().get_form(form_class)
-        #날짜 선택 위젯
-        form.fields['start_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
-        form.fields['end_date'].widget = forms.DateTimeInput(attrs={'type': 'datetime-local'})
-        return form
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)
@@ -132,12 +118,16 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     fields = ['message', ]
     pk_url_kwarg = 'todo_id'
 
+    def get(self, request, *args, **kwargs):
+        raise Http404
+
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.todo = Todo.objects.get(pk=self.kwargs['todo_id'])
         self.object.save()
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('cbv_todo_info', kwargs={"pk": self.object.todo.pk})
