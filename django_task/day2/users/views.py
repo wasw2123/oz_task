@@ -14,7 +14,7 @@ def sign_up(request):
     context = {
         'form': form
     }
-    return render(request, 'registration/sign_up.html', context)
+    return render(request, 'registration/signup.html', context)
 
 def user_login(request):
     form = AuthenticationForm(request, request.POST or None)

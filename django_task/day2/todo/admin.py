@@ -21,7 +21,7 @@ class TodosAdmin(SummernoteModelAdmin):
     inlines = [CommentInline]
     #fieldsets
     fieldsets = [
-        ('기본정보', {'fields': ('title', 'is_completed', )}),
+        ('기본정보', {'fields': ('user','title', 'is_completed', )}),
         ('본문', {'fields': ('description', 'start_date', 'end_date')}),
         ('이미지', {'fields': ('completed_image',)}),
     ]

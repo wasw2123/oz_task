@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}
+	Login
+{% endblock %}
+
+{% block content %}
     <form method="POST">
-        <h1>로그인</h1>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button>로그인</button>
-        <a href="{% url 'sign_up' %}">회원가입</a>
+        {% include 'registration/form.html' %}
+        <button class="btn btn-primary">로그인</button>
+        <a class="btn btn-secondary" href="{% url 'signup' %}">회원가입</a>
     </form>
-</body>
-</html>
+{% endblock %}

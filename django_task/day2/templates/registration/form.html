@@ -1,0 +1,18 @@
+<div>
+    {% for field in form %}
+        <div class="form-group row mb-2">
+            <label class="form-label col-md-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+            <div class="col-md-10">{{ field }}</div>
+        </div>
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {% if form.non_field_errors %}
+        {% for non_field_error in form.non_field_errors %}
+            <span class="text-danger">{{ non_field_error }}</span>
+        {% endfor %}
+    {% endif %}
+</div>

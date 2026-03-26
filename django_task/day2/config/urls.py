@@ -34,9 +34,11 @@ urlpatterns = [
 
 
     # auth
-    path('signup/', users.views.sign_up, name='sign_up' ),
-    path('login/', users.views.user_login, name='login'),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
+    # path('signup/', users.views.sign_up, name='sign_up' ),
+    # path('login/', users.views.user_login, name='login'),
+    # path('accounts/', include('django.contrib.auth.urls')),
+
 
     # utils
     path('summernote/', include('django_summernote.urls')),
