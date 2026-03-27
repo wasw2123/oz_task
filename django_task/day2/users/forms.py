@@ -11,9 +11,9 @@ class SignupForm(UserCreationForm):
         for field in ('password1', 'password2'):
             self.fields[field].widget.attrs['class'] = 'form-control'
             self.fields[field].widget.attrs['placeholder'] = 'password'
-            if self.fields[field] == "password1":
+            if field == "password1":
                 self.fields[field].label = '비밀번호'
-            if self.fields[field] == "password2":
+            if field == "password2":
                 self.fields[field].label = '비밀번호 확인'
 
 

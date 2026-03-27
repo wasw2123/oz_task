@@ -2,13 +2,13 @@ from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.core import signing
 from django.core.signing import TimestampSigner, SignatureExpired, BadSignature
-from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import CreateView, FormView
 from django.urls import reverse
 from users.forms import SignupForm, LoginForm
+from utils.email import send_email
 
 User = get_user_model()
 
@@ -27,11 +27,7 @@ class SignupView(CreateView):
         else:
             subject = "Todo 이메일 인증입니다."
             message = f'<a href="{url}">인증링크</a>를 눌러 인증해주세요.'
-            #send_email(subject, message, user.email)
-            #a_tag사용 불가로 변경
-            email = EmailMessage(subject, message, to=[user.email])
-            email.content_subtype = 'html'
-            email.send()
+            send_email(subject, message, user.email)
 
         context = {
             'user': user
@@ -64,6 +60,12 @@ class LoginView(FormView):
     template_name = 'registration/login.html'
     form_class = LoginForm
     success_url = settings.LOGIN_REDIRECT_URL
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
 
     def form_valid(self, form):
         user = form.get_user()

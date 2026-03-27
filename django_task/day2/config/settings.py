@@ -148,6 +148,7 @@ LOGIN_URL = '/users/login/'
 
 AUTH_USER_MODEL = 'users.User'
 
+DEFAULT_FROM_EMAIL = SECRET['email']['user']
 
 SUMMERNOTE_CONFIG = {
     'iframe': True,
